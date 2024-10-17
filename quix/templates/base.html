@@ -1,4 +1,6 @@
-{% load static i18n %}<!DOCTYPE html>
+{% load static i18n %}
+
+<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
@@ -10,74 +12,84 @@
       {% endblock title %}
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="An educational project using Django & HTMX" />
+    <meta name="description"
+          content="An educational project using Django & HTMX" />
     <meta name="author" content="aiXum" />
     <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
-
     <!-- Tailwind, DaisyUI -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.11/dist/full.min.css" rel="stylesheet" type="text/css" />
-
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.11/dist/full.min.css"
+          rel="stylesheet"
+          type="text/css" />
     {% block css %}
       <link href="{% static 'css/project.css' %}" rel="stylesheet" />
-      <link href="{% static 'fontawesome/css/fontawesome.min.css' %}" rel="stylesheet" />
+      <link href="{% static 'fontawesome/css/fontawesome.min.css' %}"
+            rel="stylesheet" />
       <style>
-        {% include "font_face/Vazirmatn-font-face.css" %}
-        {% include "font_face/brands.css" %}
+        {
+          % include "font_face/Vazirmatn-font-face.css" %
+        }
+
+          {
+          % include "font_face/brands.css" %
+        }
       </style>
     {% endblock css %}
-
     <!-- HTMX & Hyperscript -->
     <script src="https://unpkg.com/htmx.org@2.0.2"></script>
     <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <script defer src="{% static 'js/project.js' %}"></script>
   </head>
-
   <body class="font-sans bg-gray-100">
     {% block body %}
-    <!-- Navbar -->
-    <nav class="bg-base-100 shadow">
-      <div class="container mx-auto flex justify-between items-center py-4 px-6">
-        <a class="text-2xl font-bold text-primary" href="{% url 'home' %}">Quix</a>
-        <div class="flex space-x-4">
-          <a href="{% url 'home' %}" class="text-base font-medium text-gray-700 hover:text-primary">Home</a>
-          <a href="{% url 'about' %}" class="text-base font-medium text-gray-700 hover:text-primary">About</a>
-
-          {% if request.user.is_authenticated %}
-            <a href="{% url 'users:detail' request.user.username %}" class="text-base font-medium text-gray-700 hover:text-primary">{% translate "My Profile" %}</a>
-            <a href="{% url 'account_logout' %}" class="text-base font-medium text-gray-700 hover:text-primary">{% translate "Sign Out" %}</a>
-          {% else %}
-            {% if ACCOUNT_ALLOW_REGISTRATION %}
-              <a href="{% url 'account_signup' %}" class="text-base font-medium text-gray-700 hover:text-primary">{% translate "Sign Up" %}</a>
+      <!-- Navbar -->
+      <nav class="bg-base-100 shadow">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+          <a class="text-2xl font-bold text-primary" href="{% url 'home' %}">Quix</a>
+          <div class="flex space-x-4">
+            <a href="{% url 'home' %}"
+               class="text-base font-medium text-gray-700 hover:text-primary">Home</a>
+            <a href="{% url 'about' %}"
+               class="text-base font-medium text-gray-700 hover:text-primary">About</a>
+            {% if request.user.is_authenticated %}
+              <a href="{% url 'users:detail' request.user.username %}"
+                 class="text-base font-medium text-gray-700 hover:text-primary">{% translate "My Profile" %}</a>
+              <a href="{% url 'account_logout' %}"
+                 class="text-base font-medium text-gray-700 hover:text-primary">{% translate "Sign Out" %}</a>
+            {% else %}
+              {% if ACCOUNT_ALLOW_REGISTRATION %}
+                <a href="{% url 'account_signup' %}"
+                   class="text-base font-medium text-gray-700 hover:text-primary">{% translate "Sign Up" %}</a>
+              {% endif %}
+              <a href="{% url 'account_login' %}"
+                 class="text-base font-medium text-gray-700 hover:text-primary">{% translate "Sign In" %}</a>
             {% endif %}
-            <a href="{% url 'account_login' %}" class="text-base font-medium text-gray-700 hover:text-primary">{% translate "Sign In" %}</a>
-          {% endif %}
+          </div>
         </div>
-      </div>
-    </nav>
-
-    <!-- Main content -->
-    <div class="container mx-auto mt-6">
-      {% if messages %}
-        <div class="space-y-4">
-          {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} shadow-lg">
-              <div>
-                <span>{{ message }}</span>
+      </nav>
+      <!-- Main content -->
+      <div class="container mx-auto mt-6">
+        {% if messages %}
+          <div class="space-y-4">
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} shadow-lg">
+                <div>
+                  <span>{{ message }}</span>
+                </div>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"></button>
               </div>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-      
-      {% block main %}
-        {% block content %}
-          <p>Welcome to Quix, your educational platform.</p>
-        {% endblock content %}
-      {% endblock main %}
-    </div>
-
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% block main %}
+          {% block content %}
+            <p>Welcome to Quix, your educational platform.</p>
+          {% endblock content %}
+        {% endblock main %}
+      </div>
     {% endblock body %}
   </body>
 </html>
