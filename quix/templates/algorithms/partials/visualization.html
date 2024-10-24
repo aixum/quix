@@ -1,0 +1,11 @@
+<div class="visualization">
+  {% if step.visualization_data.type == 'ARRAY' %}
+    <div class="flex items-end justify-center h-64 gap-1">
+      {% for value in step.visualization_data.array %}
+        <div class="array-bar bg-blue-500 w-8 transition-all duration-300"
+             style="height: {{ value }}%"></div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if step.visualization_data.type == 'GRAPH' %}<!-- Graph visualization here -->{% endif %}
+</div>

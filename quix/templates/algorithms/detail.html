@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ algorithm.name }}
+{% endblock title %}
+{% block content %}
+  <!-- algorithms/detail.html -->
+  <div class="flex flex-col md:flex-row">
+    <!-- Sidebar with steps -->
+    <div class="w-full md:w-1/4 bg-gray-100 p-4">
+      <h2 class="text-xl font-bold mb-4">{{ algorithm.name }}</h2>
+      <!-- Steps navigation -->
+      <nav class="space-y-2">
+        {% for step in algorithm.algorithmstep_set.all %}
+          <button class="w-full text-left p-2 hover:bg-gray-200 rounded"
+                  hx-get="{% url 'algorithms:get_step' algorithm.slug step.order %}"
+                  hx-target="#step-content"
+                  hx-trigger="click">{{ step.title }}</button>
+        {% endfor %}
+      </nav>
+    </div>
+    <!-- Main content -->
+    <div class="w-full md:w-3/4 p-4">
+      <!-- Step content will be loaded here -->
+      <div id="step-content"
+           hx-get="{% url 'algorithms:get_step' algorithm.slug 1 %}"
+           hx-trigger="load"></div>
+      <!-- Visualization area -->
+      <div id="visualization"
+           class="mt-4 border rounded-lg p-4"
+           hx-get="{% url 'algorithms:visualize_step' algorithm.slug 1 %}"
+           hx-trigger="load"></div>
+    </div>
+  </div>
+{% endblock content %}

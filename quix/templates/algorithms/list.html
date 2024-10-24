@@ -1,0 +1,119 @@
+<!-- algorithms/list.html -->
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Algorithm Learning Platform
+{% endblock title %}
+{% block content %}
+  <div class="min-h-screen bg-gray-50">
+    <!-- Hero Section -->
+    <div class="bg-white shadow">
+      <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl font-bold text-gray-900">Learn Algorithms Visually</h1>
+        <p class="mt-2 text-lg text-gray-600">
+          Interactive visualizations and step-by-step explanations of common algorithms
+        </p>
+      </div>
+    </div>
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <!-- Algorithm Type Filter -->
+      <div class="mb-8 flex space-x-2">
+        <button class="px-4 py-2 rounded-md bg-blue-500 text-white"
+                hx-get="{% url 'algorithms:list' %}"
+                hx-target="#algorithm-grid"
+                hx-include="[name='search']"
+                hx-swap="outerHTML">All</button>
+        {% for type_choice in algorithm_types %}
+          <button class="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50"
+                  hx-get="{% url 'algorithms:list' %}?type={{ type_choice.0 }}"
+                  hx-target="#algorithm-grid"
+                  hx-swap="outerHTML">{{ type_choice.1 }}</button>
+        {% endfor %}
+      </div>
+      <!-- Search Bar -->
+      <div class="mb-8">
+        <div class="max-w-xl">
+          <input type="search"
+                 name="search"
+                 placeholder="Search algorithms..."
+                 class="w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                 hx-get="{% url 'algorithms:list' %}"
+                 hx-trigger="keyup changed delay:500ms"
+                 hx-target="#algorithm-grid"
+                 hx-swap="outerHTML"
+                 hx-include="[name='search']" />
+        </div>
+      </div>
+      <!-- Algorithm Grid -->
+      <div id="algorithm-grid"
+           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for algorithm in algorithms %}
+          <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200">
+            <div class="p-6">
+              <!-- Algorithm Type Badge -->
+              <span class="inline-block px-2 py-1 text-sm rounded-full {% if algorithm.algorithm_type == 'SORT' %}bg-blue-100 text-blue-800 {% elif algorithm.algorithm_type == 'SEARCH' %}bg-green-100 text-green-800 {% elif algorithm.algorithm_type == 'GRAPH' %}bg-purple-100 text-purple-800 {% else %}bg-gray-100 text-gray-800{% endif %}">
+                {{ algorithm.get_algorithm_type_display }}
+              </span>
+              <!-- Algorithm Name -->
+              <h2 class="mt-4 text-xl font-semibold text-gray-900">
+                <a href="{% url 'algorithms:detail' algorithm.slug %}"
+                   class="hover:text-blue-600">{{ algorithm.name }}</a>
+              </h2>
+              <!-- Complexity Info -->
+              <div class="mt-4 space-y-2 text-sm text-gray-600">
+                <p>
+                  Time: <span class="font-mono">{{ algorithm.time_complexity }}</span>
+                </p>
+                <p>
+                  Space: <span class="font-mono">{{ algorithm.space_complexity }}</span>
+                </p>
+              </div>
+              <!-- Description Preview -->
+              <p class="mt-4 text-gray-600 line-clamp-3">{{ algorithm.description|truncatewords:30 }}</p>
+              <!-- Card Footer -->
+              <div class="mt-6 flex justify-between items-center">
+                <a href="{% url 'algorithms:detail' algorithm.slug %}"
+                   class="text-blue-600 hover:text-blue-800 font-medium">Learn More →</a>
+                <!-- Step Counter -->
+                <span class="text-sm text-gray-500">{{ algorithm.algorithmstep_set.count }} steps</span>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-span-full text-center py-12">
+            <h3 class="text-lg font-medium text-gray-900">No algorithms found</h3>
+            <p class="mt-2 text-gray-500">Try adjusting your search or filters</p>
+          </div>
+        {% endfor %}
+      </div>
+      <!-- Pagination -->
+      {% if is_paginated %}
+        <div class="mt-12 flex justify-center">
+          <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}"
+                 class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                Previous
+              </a>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+              <a href="?page={{ num }}"
+                 class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium {% if page_obj.number == num %}text-blue-600 bg-blue-50{% else %}text-gray-700 hover:bg-gray-50{% endif %}">
+                {{ num }}
+              </a>
+            {% endfor %}
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}"
+                 class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                Next
+              </a>
+            {% endif %}
+          </nav>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock content %}

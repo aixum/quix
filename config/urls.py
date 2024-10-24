@@ -20,7 +20,7 @@ urlpatterns = [
     path("users/", include("quix.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
-    # ...
+    path("algo/", include("quix.algo.urls", namespace="algo")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

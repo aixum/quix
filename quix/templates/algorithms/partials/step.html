@@ -1,0 +1,11 @@
+<!-- algorithms/partials/step.html -->
+<div class="step-content">
+  <h3 class="text-xl font-bold mb-4">{{ step.title }}</h3>
+  <div class="prose">{{ step.content|safe }}</div>
+  {% if step.visualization_data %}
+    <button class="btn mt-4"
+            hx-get="{% url 'visualize_step' step.algorithm.slug step.order %}"
+            hx-target="#visualization"
+            hx-trigger="click">Visualize This Step</button>
+  {% endif %}
+</div>

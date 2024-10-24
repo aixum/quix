@@ -1,0 +1,41 @@
+<div id="algorithm-grid"
+     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {% for algorithm in algorithms %}
+    <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200">
+      <div class="p-6">
+        <!-- Algorithm Type Badge -->
+        <span class="inline-block px-2 py-1 text-sm rounded-full {% if algorithm.algorithm_type == 'SORT' %}bg-blue-100 text-blue-800 {% elif algorithm.algorithm_type == 'SEARCH' %}bg-green-100 text-green-800 {% elif algorithm.algorithm_type == 'GRAPH' %}bg-purple-100 text-purple-800 {% else %}bg-gray-100 text-gray-800{% endif %}">
+          {{ algorithm.get_algorithm_type_display }}
+        </span>
+        <!-- Algorithm Name -->
+        <h2 class="mt-4 text-xl font-semibold text-gray-900">
+          <a href="{% url 'algorithms:detail' algorithm.slug %}"
+             class="hover:text-blue-600">{{ algorithm.name }}</a>
+        </h2>
+        <!-- Complexity Info -->
+        <div class="mt-4 space-y-2 text-sm text-gray-600">
+          <p>
+            Time: <span class="font-mono">{{ algorithm.time_complexity }}</span>
+          </p>
+          <p>
+            Space: <span class="font-mono">{{ algorithm.space_complexity }}</span>
+          </p>
+        </div>
+        <!-- Description Preview -->
+        <p class="mt-4 text-gray-600 line-clamp-3">{{ algorithm.description|truncatewords:30 }}</p>
+        <!-- Card Footer -->
+        <div class="mt-6 flex justify-between items-center">
+          <a href="{% url 'algorithms:detail' algorithm.slug %}"
+             class="text-blue-600 hover:text-blue-800 font-medium">Learn More →</a>
+          <!-- Step Counter -->
+          <span class="text-sm text-gray-500">{{ algorithm.algorithmstep_set.count }} steps</span>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-span-full text-center py-12">
+      <h3 class="text-lg font-medium text-gray-900">No algorithms found</h3>
+      <p class="mt-2 text-gray-500">Try adjusting your search or filters</p>
+    </div>
+  {% endfor %}
+</div>
