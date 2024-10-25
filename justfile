@@ -35,6 +35,10 @@ coverage:
     docker compose -f docker-compose.local.yml run --rm django coverage html
     open htmlcov/index.html
 
+# Run the presentation server
+present:
+    cd presentation && npm install && npm run dev
+
 # Run type checks with mypy
 type-check:
     docker compose -f docker-compose.local.yml run --rm django mypy nems
