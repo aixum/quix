@@ -1,5 +1,7 @@
 # Welcome to [Slidev](https://github.com/slidevjs/slidev)!
 
+## This folder contains our presentation slides.
+
 To start the slide show:
 
 - `npm install`
