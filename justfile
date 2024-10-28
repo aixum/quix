@@ -41,7 +41,7 @@ present:
 
 # Run type checks with mypy
 type-check:
-    docker compose -f docker-compose.local.yml run --rm django mypy nems
+    docker compose -f docker-compose.local.yml run --rm django mypy quix
 
 # Create a superuser
 superuser:
